@@ -29,11 +29,11 @@ php artisan key:generate
 B-6 マイグレーションの実行
 php artisan migrate
 
-B-7 シーディングの実行
-php artisan db:seed
-
-B-8 シンボリックリンク作成
+B-7 シンボリックリンク作成
 php artisan storage:link
+
+B-8 シーディングの実行
+php artisan db:seed
 
 C使用技術(実行環境)
 PHP 8.1.34
