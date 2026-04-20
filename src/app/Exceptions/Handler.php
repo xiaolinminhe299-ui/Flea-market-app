@@ -2,7 +2,9 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Session\TokenMismatchException;
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -36,6 +38,21 @@ class Handler extends ExceptionHandler
     {
         $this->reportable(function (Throwable $e) {
             //
+        });
+
+        $this->renderable(function (TokenMismatchException $e, Request $request) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'message' => 'The page has expired, please try again.',
+                ], 419);
+            }
+
+            return redirect()
+                ->back()
+                ->withInput($request->except(['password', 'password_confirmation']))
+                ->withErrors([
+                    'csrf' => 'ページの有効期限が切れました。もう一度お試しください。',
+                ]);
         });
     }
 }
